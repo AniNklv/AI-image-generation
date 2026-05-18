@@ -71,14 +71,17 @@
         </div>
         <div class="grid-3">
             <div class="glass-card text-content" style="border-top: 4px solid var(--accent-1);">
+                <img src="assets/process_step1_clip.png" alt="Текстово кодиране" style="width: 100%; border-radius: 10px; margin-bottom: 1.5rem;">
                 <h3>1. Текстово кодиране (CLIP)</h3>
                 <p>Когато въведете текст, компютърът не разбира думите като нас. Той използва специален езиков модел, наречен <strong>CLIP (Contrastive Language-Image Pretraining)</strong>. Този модел преобразува всяка дума във вектори (числови масиви), наречени <em>embeddings</em>. CLIP е предварително обучен върху милиарди двойки "текст-изображение", което му позволява да разпознава визуалния смисъл зад думи като "куче", "син цвят" или "импресионизъм".</p>
             </div>
             <div class="glass-card text-content" style="border-top: 4px solid #a855f7;">
+                <img src="assets/process_step2_unet.png" alt="Обратна дифузия" style="width: 100%; border-radius: 10px; margin-bottom: 1.5rem;">
                 <h3>2. Обратна дифузия (U-Net)</h3>
                 <p>Това е сърцевината на процеса. Системата започва от <strong>пълен Гаусов шум</strong> (напълно случаен набор от пиксели). Използвайки невронна мрежа с архитектура <strong>U-Net</strong>, моделът се опитва да "изчисти" (denoise) шума. На всяка стъпка (обикновено между 20 и 50 стъпки), U-Net предвижда къде е излишният шум и го премахва, като същевременно се "ръководи" от текстовите вектори от Стъпка 1, за да оформи желаните обекти.</p>
             </div>
             <div class="glass-card text-content" style="border-top: 4px solid var(--accent-2);">
+                <img src="assets/example_art.png" alt="Декодиране" style="width: 100%; border-radius: 10px; margin-bottom: 1.5rem;">
                 <h3>3. Декодиране (VAE)</h3>
                 <p>За да се пести изчислителна мощ, целият процес на дифузия не се случва директно върху пикселите, а в силно компресирано математическо поле, наречено <em>Latent Space</em>. След като дифузията приключи, полученият резултат е неразбираем за човешкото око. Тук се включва <strong>VAE (Variational Autoencoder)</strong>. VAE действа като "декодер" – той превежда компресираните данни от скритото пространство обратно в пълноцветно изображение с висока резолюция.</p>
             </div>
