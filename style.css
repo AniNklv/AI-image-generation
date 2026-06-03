@@ -256,6 +256,101 @@ section {
   color: #fff;
 }
 
+/* Nano Banana Demo */
+.demo-shell {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(320px, 1.1fr);
+  gap: 2rem;
+  align-items: stretch;
+}
+
+.prompt-panel,
+.result-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.prompt-panel label {
+  color: var(--text-primary);
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+}
+
+.prompt-panel textarea {
+  width: 100%;
+  min-height: 180px;
+  resize: vertical;
+  padding: 1rem;
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  font: inherit;
+  line-height: 1.5;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.prompt-panel textarea:focus {
+  border-color: var(--accent-1);
+  box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.16);
+}
+
+.demo-btn {
+  width: fit-content;
+  margin-top: 1rem;
+  border: 0;
+  cursor: pointer;
+}
+
+.demo-btn:disabled {
+  cursor: wait;
+  opacity: 0.7;
+  transform: none;
+}
+
+.image-stage {
+  min-height: 360px;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(0, 242, 254, 0.16), rgba(79, 172, 254, 0.05)),
+    rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+}
+
+.image-stage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.image-placeholder {
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.image-placeholder span {
+  display: block;
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.demo-status {
+  min-height: 1.5rem;
+  margin-top: 1rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
 /* Pros and Cons */
 .comparison {
   display: flex;
@@ -396,6 +491,17 @@ section {
   }
   .comparison {
     flex-direction: column;
+  }
+  .demo-shell {
+    grid-template-columns: 1fr;
+    padding: 1.5rem;
+  }
+  .image-stage {
+    min-height: 260px;
+  }
+  .demo-btn {
+    width: 100%;
+    text-align: center;
   }
   .hamburger {
     display: flex;
