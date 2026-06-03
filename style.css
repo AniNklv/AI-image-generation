@@ -256,7 +256,7 @@ section {
   color: #fff;
 }
 
-/* Nano Banana Demo */
+/* AI Generator Demo */
 .demo-shell {
   display: grid;
   grid-template-columns: minmax(280px, 0.9fr) minmax(320px, 1.1fr);
