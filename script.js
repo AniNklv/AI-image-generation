@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // AI image generator demo
+    // Nano Banana demo
     const nanoForm = document.getElementById('nano-form');
     const nanoPrompt = document.getElementById('nano-prompt');
     const nanoResult = document.getElementById('nano-result');
@@ -150,8 +150,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     <circle cx="520" cy="250" r="5"/>
                 </g>
                 <g font-family="Arial, sans-serif">
-                    <text x="60" y="92" fill="white" font-size="42" font-weight="700">AI Генератор</text>
-                    <text x="60" y="138" fill="rgba(255,255,255,0.72)" font-size="24">демонстрационно изображение</text>
+                    <text x="60" y="92" fill="white" font-size="42" font-weight="700">Nano Banana</text>
+                    <text x="60" y="138" fill="rgba(255,255,255,0.72)" font-size="24">demo generation</text>
                     <text fill="white" font-size="27" font-weight="700">${promptLines}</text>
                 </g>
             </svg>
@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (!response.ok) {
-            throw new Error('Image generation request failed');
+            throw new Error('Nano Banana request failed');
         }
 
         return response.json();
