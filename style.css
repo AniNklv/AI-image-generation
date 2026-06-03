@@ -262,6 +262,8 @@ section {
   grid-template-columns: minmax(280px, 0.9fr) minmax(320px, 1.1fr);
   gap: 2rem;
   align-items: stretch;
+  max-width: 1100px;
+  margin-inline: auto;
 }
 
 .prompt-panel,
@@ -270,10 +272,20 @@ section {
   flex-direction: column;
 }
 
+.prompt-panel {
+  gap: 1rem;
+  justify-content: center;
+}
+
+.prompt-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
 .prompt-panel label {
   color: var(--text-primary);
   font-weight: 800;
-  margin-bottom: 0.75rem;
 }
 
 .prompt-panel textarea {
@@ -298,7 +310,6 @@ section {
 
 .demo-btn {
   width: fit-content;
-  margin-top: 1rem;
   border: 0;
   cursor: pointer;
 }
@@ -310,7 +321,7 @@ section {
 }
 
 .image-stage {
-  min-height: 360px;
+  min-height: 320px;
   aspect-ratio: 1 / 1;
   width: 100%;
   display: grid;

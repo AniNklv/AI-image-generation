@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Генериране на изображения с ИИ</title>
     <meta name="description" content="Уебсайт за принципите, инструментите и приложенията на изкуствения интелект при генериране на изображения.">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 
@@ -132,8 +132,10 @@
         <h2 class="section-title">Демонстрационен AI генератор</h2>
         <div class="demo-shell glass-card">
             <form class="prompt-panel" id="nano-form">
-                <label for="nano-prompt">Prompt</label>
-                <textarea id="nano-prompt" name="prompt" rows="6" placeholder="Напиши сцена, стил, цветове и детайли..." required>Футуристичен град през нощта, неонови светлини, cinematic lighting</textarea>
+                <div class="prompt-field">
+                    <label for="nano-prompt">Prompt</label>
+                    <textarea id="nano-prompt" name="prompt" rows="6" placeholder="Напиши сцена, стил, цветове и детайли..." required>Футуристичен град през нощта, неонови светлини, cinematic lighting</textarea>
+                </div>
                 <button class="btn demo-btn" type="submit">Генерирай</button>
             </form>
             <div class="result-panel" aria-live="polite">
