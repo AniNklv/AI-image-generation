@@ -84,81 +84,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // AI image generator demo
+    // AI image generator
     const nanoForm = document.getElementById('nano-form');
     const nanoPrompt = document.getElementById('nano-prompt');
     const nanoResult = document.getElementById('nano-result');
     const nanoStatus = document.getElementById('nano-status');
-
-    const escapeSvgText = text => text
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;');
-
-    const hashPrompt = prompt => {
-        let hash = 0;
-        for (let index = 0; index < prompt.length; index++) {
-            hash = (hash << 5) - hash + prompt.charCodeAt(index);
-            hash |= 0;
-        }
-        return Math.abs(hash);
-    };
-
-    const createDemoImage = prompt => {
-        const hash = hashPrompt(prompt);
-        const hueA = hash % 360;
-        const hueB = (hueA + 90) % 360;
-        const hueC = (hueA + 190) % 360;
-        const words = prompt.trim().split(/\s+/).slice(0, 16);
-        const lines = [];
-
-        for (let index = 0; index < words.length; index += 4) {
-            lines.push(words.slice(index, index + 4).join(' '));
-        }
-
-        const promptLines = lines.slice(0, 4).map((line, index) =>
-            `<tspan x="60" y="${650 + index * 34}">${escapeSvgText(line)}</tspan>`
-        ).join('');
-
-        const svg = `
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900">
-                <defs>
-                    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="hsl(${hueA}, 88%, 54%)"/>
-                        <stop offset="48%" stop-color="hsl(${hueB}, 82%, 42%)"/>
-                        <stop offset="100%" stop-color="hsl(${hueC}, 78%, 18%)"/>
-                    </linearGradient>
-                    <radialGradient id="glow" cx="35%" cy="22%" r="70%">
-                        <stop offset="0%" stop-color="rgba(255,255,255,0.85)"/>
-                        <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
-                    </radialGradient>
-                    <filter id="blur">
-                        <feGaussianBlur stdDeviation="24"/>
-                    </filter>
-                </defs>
-                <rect width="900" height="900" fill="url(#bg)"/>
-                <circle cx="${180 + hash % 260}" cy="${170 + hash % 190}" r="230" fill="url(#glow)" opacity="0.72"/>
-                <circle cx="${610 + hash % 120}" cy="${270 + hash % 160}" r="150" fill="rgba(255,255,255,0.2)" filter="url(#blur)"/>
-                <path d="M0 590 C 180 ${430 + hash % 120}, 310 ${760 - hash % 90}, 510 610 S 760 520, 900 680 L 900 900 L 0 900 Z" fill="rgba(0,0,0,0.34)"/>
-                <path d="M80 520 C 250 ${390 + hash % 80}, 390 ${500 + hash % 120}, 560 420 S 790 390, 850 500" fill="none" stroke="rgba(255,255,255,0.72)" stroke-width="8" stroke-linecap="round"/>
-                <g fill="rgba(255,255,255,0.72)">
-                    <circle cx="150" cy="250" r="6"/>
-                    <circle cx="710" cy="170" r="5"/>
-                    <circle cx="780" cy="410" r="7"/>
-                    <circle cx="330" cy="130" r="4"/>
-                    <circle cx="520" cy="250" r="5"/>
-                </g>
-                <g font-family="Arial, sans-serif">
-                    <text x="60" y="92" fill="white" font-size="42" font-weight="700">AI Генератор</text>
-                    <text x="60" y="138" fill="rgba(255,255,255,0.72)" font-size="24">демонстрационно изображение</text>
-                    <text fill="white" font-size="27" font-weight="700">${promptLines}</text>
-                </g>
-            </svg>
-        `;
-
-        return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
-    };
+    const geminiApiKey = document.getElementById('gemini-api-key');
+    const geminiModel = 'gemini-3.1-flash-image';
 
     const setGeneratedImage = (src, prompt) => {
         nanoResult.innerHTML = '';
@@ -168,16 +100,29 @@ document.addEventListener('DOMContentLoaded', () => {
         nanoResult.appendChild(image);
     };
 
-    const requestNanoBananaImage = async prompt => {
-        const endpoint = window.NANO_BANANA_ENDPOINT;
+    const getInlineImage = response => {
+        const parts = response?.candidates?.[0]?.content?.parts || [];
+        const imagePart = parts.find(part => part.inlineData || part.inline_data);
+        const inlineData = imagePart?.inlineData || imagePart?.inline_data;
+
+        if (!inlineData?.data) {
+            return null;
+        }
+
+        const mimeType = inlineData.mimeType || inlineData.mime_type || 'image/png';
+        return `data:${mimeType};base64,${inlineData.data}`;
+    };
+
+    const requestImageGeneration = async prompt => {
+        const endpoint = window.NANO_BANANA_ENDPOINT || window.IMAGE_GENERATOR_ENDPOINT;
         if (!endpoint) {
-            return { imageUrl: createDemoImage(prompt), isDemo: true };
+            return requestGeminiImage(prompt);
         }
 
         const response = await fetch(endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ model: 'nano-banana', prompt })
+            body: JSON.stringify({ model: geminiModel, prompt })
         });
 
         if (!response.ok) {
@@ -187,7 +132,43 @@ document.addEventListener('DOMContentLoaded', () => {
         return response.json();
     };
 
+    const requestGeminiImage = async prompt => {
+        const apiKey = (geminiApiKey?.value || localStorage.getItem('geminiApiKey') || '').trim();
+
+        if (!apiKey) {
+            throw new Error('Missing Gemini API key');
+        }
+
+        localStorage.setItem('geminiApiKey', apiKey);
+
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/${geminiModel}:generateContent`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-goog-api-key': apiKey
+            },
+            body: JSON.stringify({
+                contents: [{
+                    parts: [{ text: prompt }]
+                }],
+                generationConfig: {
+                    responseModalities: ['Image']
+                }
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Gemini image generation failed');
+        }
+
+        return response.json();
+    };
+
     if (nanoForm && nanoPrompt && nanoResult && nanoStatus) {
+        if (geminiApiKey) {
+            geminiApiKey.value = localStorage.getItem('geminiApiKey') || '';
+        }
+
         nanoForm.addEventListener('submit', async event => {
             event.preventDefault();
             const prompt = nanoPrompt.value.trim();
@@ -203,20 +184,19 @@ document.addEventListener('DOMContentLoaded', () => {
             nanoStatus.textContent = 'Генериране...';
 
             try {
-                const result = await requestNanoBananaImage(prompt);
-                const imageSource = result.imageUrl || result.image || result.url;
+                const result = await requestImageGeneration(prompt);
+                const imageSource = result.imageUrl || result.image || result.url || getInlineImage(result);
 
                 if (!imageSource) {
                     throw new Error('Missing image URL');
                 }
 
                 setGeneratedImage(imageSource, prompt);
-                nanoStatus.textContent = result.isDemo
-                    ? 'Генерирано demo изображение'
-                    : 'Изображението е генерирано';
+                nanoStatus.textContent = 'Изображението е генерирано';
             } catch (error) {
-                setGeneratedImage(createDemoImage(prompt), prompt);
-                nanoStatus.textContent = 'Показано е demo изображение';
+                nanoStatus.textContent = error.message === 'Missing Gemini API key'
+                    ? 'Въведи Gemini API key, за да генерираш реално изображение'
+                    : 'Генерирането не успя. Провери API key или backend endpoint';
             } finally {
                 button.disabled = false;
             }

@@ -288,10 +288,9 @@ section {
   font-weight: 800;
 }
 
-.prompt-panel textarea {
+.prompt-panel textarea,
+.prompt-panel input {
   width: 100%;
-  min-height: 180px;
-  resize: vertical;
   padding: 1rem;
   color: var(--text-primary);
   background: rgba(255, 255, 255, 0.06);
@@ -303,7 +302,13 @@ section {
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.prompt-panel textarea:focus {
+.prompt-panel textarea {
+  min-height: 180px;
+  resize: vertical;
+}
+
+.prompt-panel textarea:focus,
+.prompt-panel input:focus {
   border-color: var(--accent-1);
   box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.16);
 }

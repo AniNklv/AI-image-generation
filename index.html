@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Генериране на изображения с ИИ</title>
     <meta name="description" content="Уебсайт за принципите, инструментите и приложенията на изкуствения интелект при генериране на изображения.">
-    <link rel="stylesheet" href="style.css?v=4">
+    <link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
 
@@ -127,25 +127,29 @@
         </div>
     </section>
 
-    <!-- 4.5. Демонстрационен AI генератор -->
+    <!-- 4.5. Генератор на изображения -->
     <section id="nano-demo" class="reveal">
-        <h2 class="section-title">Демонстрационен AI генератор</h2>
+        <h2 class="section-title">Генератор на изображения</h2>
         <div class="demo-shell glass-card">
             <form class="prompt-panel" id="nano-form">
                 <div class="prompt-field">
                     <label for="nano-prompt">Prompt</label>
                     <textarea id="nano-prompt" name="prompt" rows="6" placeholder="Напиши сцена, стил, цветове и детайли..." required>Футуристичен град през нощта, неонови светлини, cinematic lighting</textarea>
                 </div>
+                <div class="prompt-field">
+                    <label for="gemini-api-key">Gemini API key</label>
+                    <input id="gemini-api-key" name="api-key" type="password" placeholder="Въведи API key">
+                </div>
                 <button class="btn demo-btn" type="submit">Генерирай</button>
             </form>
             <div class="result-panel" aria-live="polite">
                 <div class="image-stage" id="nano-result">
                     <div class="image-placeholder">
-                        <span>AI Генератор</span>
-                        <p>Въведи prompt и генерирай изображение</p>
+                        <span>Резултат</span>
+                        <p>Генерираното изображение ще се появи тук</p>
                     </div>
                 </div>
-                <p class="demo-status" id="nano-status">Готово за демонстрация</p>
+                <p class="demo-status" id="nano-status">Готов за генериране</p>
             </div>
         </div>
     </section>
@@ -209,6 +213,6 @@
         </div>
     </section>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=5"></script>
 </body>
 </html>
